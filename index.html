@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>サムネの答え — 学術系動画を140字で</title>
+<style>
+  :root { --bg:#f7f6f2; --card:#fff; --ink:#222; --sub:#666; --accent:#1d6fd8; --line:#ddd; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, "Hiragino Sans", "Yu Gothic UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; }
+  main { max-width: 720px; margin: 0 auto; padding: 20px 16px 60px; }
+  h1 { font-size: 1.6rem; margin: 8px 0 0; }
+  .lead { color: var(--sub); margin: 4px 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .step { font-weight: 700; margin-bottom: 8px; }
+  input[type=text], input[type=password], textarea { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; font: inherit; }
+  textarea { min-height: 140px; resize: vertical; }
+  button { font: inherit; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; margin: 8px 8px 0 0; }
+  button.ghost { background: #fff; color: var(--accent); }
+  button:disabled { opacity: .5; cursor: default; }
+  .video { display: flex; gap: 12px; align-items: center; margin-top: 12px; }
+  .video img { width: 160px; border-radius: 8px; }
+  .hint { font-size: .85rem; color: var(--sub); }
+  details { margin-top: 8px; }
+  .count { font-size: .9rem; margin-top: 4px; }
+  .count.over { color: #c0392b; font-weight: 700; }
+  .status { margin-top: 8px; font-size: .9rem; color: var(--sub); white-space: pre-wrap; }
+  .status.err { color: #c0392b; }
+  footer { font-size: .8rem; color: var(--sub); }
+</style>
+</head>
+<body>
+<main>
+  <h1>サムネの答え</h1>
+  <p class="lead">学術系YouTubeや論文を、サムネの「問い」への答え＋理由3つ（140字）にまとめるツール。</p>
+
+  <section class="card">
+    <div class="step">① 動画のURL</div>
+    <input id="url" type="text" placeholder="https://youtu.be/...">
+    <div id="video" class="video" hidden>
+      <img id="thumb" alt="サムネイル">
+      <div>
+        <div id="title" style="font-weight:700"></div>
+        <div id="author" class="hint"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="step">② 説明文 または 文字起こしを貼る</div>
+    <textarea id="source" placeholder="動画の説明文や文字起こしをここに貼りつけます"></textarea>
+    <details>
+      <summary class="hint">文字起こしの出し方（YouTube公式の機能）</summary>
+      <p class="hint">パソコン：動画の下の説明欄で「…もっと見る」を押し、いちばん下の「文字起こしを表示」を押します。右側に出た文字を全部選んでコピーし、ここに貼ります。<br>
+      説明文に答えが書いてある動画なら、説明文だけでも大丈夫です。</p>
+    </details>
+  </section>
+
+  <section class="card">
+    <div class="step">③ まとめる</div>
+    <label class="hint" for="apikey">Claude APIキー（入れると、このページの中でAIがまとめます。キーはこの端末のブラウザにだけ保存されます）</label>
+    <input id="apikey" type="password" placeholder="sk-ant-...">
+    <div>
+      <button id="run">AIでまとめる</button>
+      <button id="copyPrompt" class="ghost">キーなし：指示文をコピー</button>
+    </div>
+    <p class="hint">キーがない場合は「指示文をコピー」を押して、claude.ai などのAIに貼りつけてください。返ってきた答えを下の欄に貼ります。</p>
+    <div id="status" class="status"></div>
+  </section>
+
+  <section class="card">
+    <div class="step">④ できあがり（自由に直せます）</div>
+    <textarea id="out" placeholder="ここに140字のまとめが入ります"></textarea>
+    <div id="count" class="count"></div>
+    <button id="post">Xの投稿画面を開く</button>
+    <button id="copyOut" class="ghost">コピー</button>
+    <p class="hint">自動では投稿しません。Xの画面で内容を確認してから、自分で「ポスト」を押します。元の動画へのリンクと出典が必ず入ります。</p>
+  </section>
+
+  <footer>
+    YouTubeの字幕を勝手に取ることはしません。使うのは、公式の画像URL（サムネイル）と、自分でコピーした文章だけです。<br>
+    試作品です。意見・提案は <a href="https://github.com/birdnnjjhiroselittle/samune-no-kotae/issues">GitHubのIssues</a> へ。
+  </footer>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
